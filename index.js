@@ -1,13 +1,37 @@
-function shadowizard(options) {
-  let images = document.querySelectorAll(".shadowizard");
-  if (options.shadow_type === "hard") options.shadow_type = "0px";
-  else options.shadow_type = "15px";
-  images.forEach((image) => {
-    image.style.boxShadow = `10px 10px ${options.shadow_type} 1px rgba(0,0,0,0.12)`;
-    if (options.padding) {
-      image.style.padding = "1em";
+au = module.require("./auxiliar/auxiliar");
+
+function caesar(option, message, key) {
+  encryptedNumbers = [];
+  encryptedString = "";
+  decryptedString = "";
+  let cipher = null;
+  let pure = null;
+  let cifra = au.pureText(message);
+  if (option === "encrypt") {
+    for (char of cifra) {
+      if (au.validInterval(char)) {
+        cipher = (char + key) % 26;
+        encryptedString += String.fromCharCode(cipher + 97);
+      } else {
+        encryptedString += String.fromCharCode(char);
+      }
     }
-  });
+    return encryptedString;
+  } else if (option === "decrypt") {
+    for (char of cifra) {
+      if (au.validInterval(char)) {
+        pure = (char - key + 26) % 26;
+        decryptedString += String.fromCharCode(pure + 97);
+      } else {
+        decryptedString += String.fromCharCode(char);
+      }
+    }
+    return decryptedString;
+  } else {
+    console.log(
+      "Invalid first parameter <option> for caesar method. The valid options are: encrypt or decrypt"
+    );
+  }
 }
 
-module.exports.shadowizard = shadowizard;
+module.exports.caesar = caesar;
